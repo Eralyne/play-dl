@@ -81,7 +81,7 @@ export async function video_basic_info(url: string, options: InfoOptions = {}) {
         cookies: true
     });
     
-    body = body.split("\r\n").filter((x) => x.length !== 4).join('')
+    body = body.split("\r\n").filter((x) => x.length !== 4 && x.length !== 3).join('')
 
     const player_response = JSON.parse(body.split('var ytInitialPlayerResponse = ')[1].split('}};')[0] + '}}');
     const initial_response = JSON.parse(body.split('var ytInitialData = ')[1].split('}};')[0] + '}}');
