@@ -75,11 +75,14 @@ export async function video_basic_info(url: string, options: InfoOptions = {}) {
     if (yt_validate(url) !== 'video') throw new Error('This is not a YouTube Watch URL');
     let video_id: string = extractID(url);
     const new_url = `https://www.youtube.com/watch?v=${video_id}&has_verified=1`;
-    const body = await request(new_url, {
+    let body = await request(new_url, {
         proxies: options.proxy ?? undefined,
         headers: { 'accept-language': 'en-US,en-IN;q=0.9,en;q=0.8,hi;q=0.7' },
         cookies: true
     });
+    
+    body = body.split("\r\n").filter((x) => x.length !== 4).join('')
+
     const player_response = JSON.parse(body.split('var ytInitialPlayerResponse = ')[1].split('}};')[0] + '}}');
     const initial_response = JSON.parse(body.split('var ytInitialData = ')[1].split('}};')[0] + '}}');
     if (player_response.playabilityStatus.status !== 'OK')
